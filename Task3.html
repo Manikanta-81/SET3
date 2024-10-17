@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Calculator</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        margin: 20px;
+        text-align: center;
+      }
+      .container {
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        margin: 0 auto;
+      }
+      input,
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: blue;
+        color: white;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: rgb(55, 131, 178);
+      }
+      #result {
+        margin-top: 20px;
+        font-weight: bold;
+        color: blue;
+      }
+      h2 {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="signup-container" class="container">
+      <h2>Signup</h2>
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <select id="operator">
+        <option value="+">Addition (+)</option>
+        <option value="-">Subtraction (-)</option>
+        <option value="*">Multiplication (*)</option>
+      </select>
+      <button onclick="signup()">Submit</button>
+    </div>
+
+    <div id="login-container" class="container" style="display: none">
+      <h2>Login</h2>
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input
+        type="password"
+        id="login-password"
+        placeholder="Password"
+        required
+      />
+      <button onclick="login()">Login</button>
+    </div>
+
+    <div id="calculator-container" class="container" style="display: none">
+      <h2>Calculator</h2>
+      <h3 id="welcome-message"></h3>
+      <input type="number" id="input1" placeholder="Input 1" required />
+      <input type="number" id="input2" placeholder="Input 2" required />
+      <button onclick="calculate()">Calculate</button>
+      <div id="result"></div>
+    </div>
+
+    <script>
+      let users = {};
+
+      function signup() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const operator = document.getElementById("operator").value;
+
+        if (!name || !email || !password) {
+          alert("Please fill out all fields.");
+          return;
+        }
+
+        users[email] = { name, password, operator };
+        alert("Signup successful! Please log in.");
+        document.getElementById("signup-container").style.display = "none";
+        document.getElementById("login-container").style.display = "block";
+      }
+
+      function login() {
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+
+        if (users[email] && users[email].password === password) {
+          const user = users[email];
+          document.getElementById(
+            "welcome-message"
+          ).innerText = `Welcome, ${user.name}. You chose: ${user.operator}`;
+          document.getElementById("login-container").style.display = "none";
+          document.getElementById("calculator-container").style.display =
+            "block";
+        } else {
+          alert("Invalid email or password.");
+        }
+      }
+
+      function calculate() {
+        const input1 = parseFloat(document.getElementById("input1").value);
+        const input2 = parseFloat(document.getElementById("input2").value);
+        const operator =
+          users[document.getElementById("login-email").value].operator;
+        let result;
+
+        if (isNaN(input1) || isNaN(input2)) {
+          alert("Please enter valid numbers.");
+          return;
+        }
+
+        switch (operator) {
+          case "+":
+            result = input1 + input2;
+            break;
+          case "-":
+            result = input1 - input2;
+            break;
+          case "*":
+            result = input1 * input2;
+            break;
+          default:
+            alert("Invalid operator.");
+            return;
+        }
+
+        document.getElementById("result").innerText = `Result: ${result}`;
+      }
+    </script>
+  </body>
+</html>
